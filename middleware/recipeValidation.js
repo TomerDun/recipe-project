@@ -1,3 +1,5 @@
+import { allRecipes } from "../models/recipeModel.js";
+
 export function recipefilterValidator(req, res, next) {
     const err = new Error('Invalid Filter Values');
     err.status = 400;
@@ -13,6 +15,16 @@ export function recipefilterValidator(req, res, next) {
             err.details = 'invalid maxCookingTime'
             throw err;
         }
+    }
+    next()
+}
+
+export function recipeExists(req, res, next) {
+    const arrFilter = allRecipes.filter(item => item.id === req.params.recipeId);
+    if (!arrFilter.length) {
+        const err = new Error('Recipe Not Found')
+        err.status = 404;
+        throw err;
     }
     next()
 }

@@ -11,9 +11,16 @@ export function getRecipes(req, res) {
         recipes = recipes.filter(r => r.cookingTime <= Number(req.query.maxCookingTime))
     }
 
-    if (req.params.search) {
+    if (req.query.search) {
         recipes = recipes.filter(r => r.title.includes(req.params.search) || r.description.includes(req.params.search));
     }
 
     res.status(200).json(recipes);
+}
+
+export function getRecipe(req,res) {
+    const output = allRecipes.filter(r => r.id == req.params.recipeId)[0];
+    console.log(output);
+    
+    res.status(200).json(output);
 }
