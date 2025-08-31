@@ -29,10 +29,17 @@ export function addRecipe(req, res) {
     res.sendStatus(201);
 }
 
-export function deleteRecipe(req, res) {
-    console.log(req.params.recipeId);
-    
+export function deleteRecipe(req, res) {        
     const newRecipes = fetchRecipes().filter(r => r.id != req.params.recipeId);                    
     setRecipes(newRecipes);
     res.sendStatus(204);
+}
+
+export function updateRecipe(req, res) {
+    const recipes = fetchRecipes();
+    const updateIndex = recipes.findIndex(r => r.id == req.params.recipeId);
+    const updateRecipe = recipes[updateIndex];
+
+    recipes[updateIndex] = {...updateRecipe, ...req.body};
+    res.status(201).json(recipes[updateIndex]);
 }

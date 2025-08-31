@@ -31,16 +31,6 @@ export function recipeExists(req, res, next) {
 }
 
 
-// Input Validations
-
-// title: Required, string, 3-100 characters
-// description: Required, string, 10-500 characters
-// ingredients: Required, array with at least 1 item
-// instructions: Required, array with at least 1 item
-// cookingTime: Required, positive number
-// servings: Required, positive integer
-// difficulty: Required, one of: "easy", "medium", "hard"
-
 export const recipeSchema = [
     body('title')
         .exists({ checkFalsy: true }).withMessage('title is required')
