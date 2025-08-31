@@ -1,4 +1,4 @@
-export const allRecipes = [
+export let allRecipes = [
     {
         id: "1",
         title: "Spaghetti Carbonara",
@@ -138,3 +138,24 @@ export const allRecipes = [
         createdAt: "2024-06-05T16:10:00.000Z"
     }
 ]
+
+export function fetchRecipes() {
+    return allRecipes;
+}
+
+export function setRecipes(newRecipes) {
+
+    allRecipes = newRecipes;
+
+}
+
+export function createRecipe(data) {
+    const newRecipe = { ...data, id: generateId() }
+    allRecipes.push(newRecipe);
+}
+
+
+function generateId() {
+    const maxId = Math.max(allRecipes.map(r => r.id));
+    return maxId + 1;
+}

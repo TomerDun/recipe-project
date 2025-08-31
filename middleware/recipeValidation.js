@@ -1,10 +1,11 @@
-import { allRecipes } from "../models/recipeModel.js";
+import { fetchRecipes } from "../models/recipeModel.js";
+import { body, validationResult } from "express-validator";
 
 export function recipefilterValidator(req, res, next) {
     const err = new Error('Invalid Filter Values');
     err.status = 400;
 
-    if (req.query.difficulty) {                
+    if (req.query.difficulty) {
         if (req.query.difficulty != 'easy' && req.query.difficulty != 'medium' && req.query.difficulty !== 'hard') {
             err.details = 'invalid difficulty'
             throw err;
@@ -20,10 +21,49 @@ export function recipefilterValidator(req, res, next) {
 }
 
 export function recipeExists(req, res, next) {
-    const arrFilter = allRecipes.filter(item => item.id === req.params.recipeId);
+    const arrFilter = fetchRecipes().filter(item => item.id === req.params.recipeId);
     if (!arrFilter.length) {
         const err = new Error('Recipe Not Found')
         err.status = 404;
+        throw err;
+    }
+    next()
+}
+
+
+// Input Validations
+
+// title: Required, string, 3-100 characters
+// description: Required, string, 10-500 characters
+// ingredients: Required, array with at least 1 item
+// instructions: Required, array with at least 1 item
+// cookingTime: Required, positive number
+// servings: Required, positive integer
+// difficulty: Required, one of: "easy", "medium", "hard"
+
+export const recipeSchema = [
+    body('title')
+        .exists({ checkFalsy: true }).withMessage('title is required')
+        .isString().withMessage('title must be a string')
+        .isLength({ min: 3, max: 100 }).withMessage('title must be between 3 and 100 characters'),
+    body('description')
+        .exists({ checkFalsy: true }).withMessage('description is required')
+        .isString().withMessage('description must be a string')
+        .isLength({ min: 10, max: 500 }).withMessage('description must be between 10 and 500 characters'),
+    body('ingredients')
+        .exists({ checkFalsy: true }).withMessage('ingredients is required')
+        .isArray({ min: 1 }).withMessage('ingredients must have at least one item'),
+    body('cookingTime').exists({checkFalsy: true}).isInt(),
+    body('serving').exists({checkFalsy: true}).isInt(),
+    body('difficulty').exists({checkFalsy: true}).isString().isIn(['easy', 'medium', 'hard']).withMessage('difficulty must be easy | medium | hard')
+]
+
+export function validateRecipe(req, res, next) {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        const err = new Error('Recipe Validation Failed');
+        err.details = errors.array();
         throw err;
     }
     next()
