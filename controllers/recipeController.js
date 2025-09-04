@@ -51,3 +51,8 @@ export async function getUserRecipesHandler(req, res) {
     const recipes = await fetchUserRecipes(req.user.id);
     res.status(200).json(recipes);
 }
+
+// TODO: Add delete image file
+export async function deleteRecipeHandler(req, res) {
+    await deleteRecipe(req.params.recipeId);
+}
