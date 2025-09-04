@@ -1,3 +1,4 @@
+import { fetchUserRecipes } from "../db/models/recipeModel.js";
 import { createRecipe, fetchRecipes, setRecipes } from "../models/recipeModel.js";
 
 // TODO: Validate query params
@@ -42,4 +43,11 @@ export function updateRecipe(req, res) {
 
     recipes[updateIndex] = {...updateRecipe, ...req.body};
     res.status(201).json(recipes[updateIndex]);
+}
+
+// --DB--
+
+export async function getUserRecipesHandler(req, res) {
+    const recipes = await fetchUserRecipes(req.user.id);
+    res.status(200).json(recipes);
 }

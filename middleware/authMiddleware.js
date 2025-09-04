@@ -18,7 +18,7 @@ export function protectedRoute(req, res, next) {
     try {
         const payload = jwt.verify(token, process.env.JWT_SECRET);
         req.user = payload;
-        console.log('👤 Token validated');
+        console.log(`👤 Token validated (${payload.email})`);
         
         next();
     } catch (error) {
