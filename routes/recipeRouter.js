@@ -1,10 +1,11 @@
 import express from 'express';
 import { addRecipe, deleteRecipe, getRecipe, getRecipes, updateRecipe,  } from '../controllers/recipeController.js';
 import { recipeExists, recipefilterValidator, recipeSchema, validateRecipe } from '../middleware/recipeValidation.js';
+import { protectedRoute } from '../middleware/authMiddleware.js';
 
 export const recipeRouter = express.Router();
 
-recipeRouter.get('/', recipefilterValidator, getRecipes);
+recipeRouter.get('/', protectedRoute, recipefilterValidator, getRecipes);
 recipeRouter.post('/', recipeSchema, validateRecipe, addRecipe);
 recipeRouter.get('/:recipeId', recipeExists, getRecipe);
 recipeRouter.delete('/:recipeId', recipeExists, deleteRecipe);
