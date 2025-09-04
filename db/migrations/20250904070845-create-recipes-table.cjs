@@ -24,7 +24,7 @@ module.exports = {
  */
   async up(queryInterface, Sequelize) {
     queryInterface.createTable('recipes', {
-      'id': { type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4 },
+      'id': { type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.literal('(UUID())') },
       'title': { type: Sequelize.STRING, allowNull: false },
       'ingredients': { type: Sequelize.JSON },
       'instructions': { type: Sequelize.JSON },
@@ -34,8 +34,8 @@ module.exports = {
       'imageUrl': { type: Sequelize.STRING },
       'isPublic': { type: Sequelize.BOOLEAN },
       'userId': { type: Sequelize.UUID, references: { model: 'users', key: 'id' }, onUpdate: 'CASCADE', onDelete: 'CASCADE' },
-      'createdAt': { type: Sequelize.DATE, defaultValue: Sequelize.NOW },
-      'updatedAt': { type: Sequelize.DATE, defaultValue: Sequelize.NOW },
+      'createdAt': { type: Sequelize.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP') },
+      'updatedAt': { type: Sequelize.DATE, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP') },
     })
   },
 

@@ -3,6 +3,7 @@ import { recipeRouter } from './routes/recipeRouter.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import morgan from 'morgan';
 import { sequelize } from './db/connection.js';
+import { authRouter } from './routes/authRouter.js';
 
 const app = express();
 
@@ -12,9 +13,10 @@ app.use(morgan('dev'))
 
 // Routes
 app.use('/recipes', recipeRouter);
+app.use('/auth', authRouter);
 
 
-app.use(errorHandler);
+
 
 async function testDBConnection() {
     try {
@@ -27,6 +29,9 @@ async function testDBConnection() {
         
     }
 }
+
+
+app.use(errorHandler);
 
 app.listen(8080, async () => {
     console.log('✈ Server running on port 8080...');

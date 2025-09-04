@@ -15,7 +15,7 @@ module.exports = {
 */
   async up(queryInterface, Sequelize) {
     queryInterface.createTable('userFavorites', {
-      id: {type: Sequelize.UUID, defaultValue: Sequelize.UUIDV4, primaryKey: true},
+      id: {type: Sequelize.UUID, defaultValue: Sequelize.literal('(UUID())'), primaryKey: true},
       userId: {type: Sequelize.UUID, references: {model: 'users', key: 'id'}, onDelete: 'CASCADE', onUpdate: 'CASCADE'},
       recipeId: {type: Sequelize.UUID, references: {model: 'recipes', key: 'id'}, onDelete: 'CASCADE', onUpdate: 'CASCADE'},
     })
