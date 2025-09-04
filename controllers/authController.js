@@ -1,4 +1,4 @@
-import { createUser, getUser } from "../db/models/authModel.js";
+import { createUser, getProfile, getUser } from "../db/models/authModel.js";
 import jwt from 'jsonwebtoken';
 
 
@@ -28,5 +28,16 @@ export async function login(req, res) {
     // Generate token for user
     const token = generateToken({id: user.id, email: user.email});
     res.status(200).json({user, token});
+}
+
+export async function getProfileHandler(req, res) {
+    console.log('!Started GetProfile Function!');
+    
+    console.log('------REQ.user: ', req.user);
+    // console.log(req);
+    
+    const id = req.user.id;
+    const user = await getProfile(id);
+    res.status(200).json(user);
 }
 

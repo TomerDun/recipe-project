@@ -1,7 +1,9 @@
 import {Router} from 'express'
-import { login, register } from '../controllers/authController.js';
+import { getProfileHandler, login, register } from '../controllers/authController.js';
+import { protectedRoute } from '../middleware/authMiddleware.js';
 
 export const authRouter = Router();
 
 authRouter.post('/register', register);
 authRouter.post('/login', login);
+authRouter.get('/profile', protectedRoute ,getProfileHandler);

@@ -70,6 +70,12 @@ export async function getUser(email, password) {
         firstName: user.firstName,
         lastName: user.lastName
     }
+}
 
+export async function getProfile(id) {
+    const [res] = await sequelize.query('SELECT * FROM users WHERE id = :id', {replacements: {id}});
+    const user = res[0];
+    delete user.password;
 
+    return user;
 }
