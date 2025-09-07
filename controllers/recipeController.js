@@ -1,5 +1,6 @@
 import { fetchUserRecipes } from "../db/models/recipeModel.js";
-import { createRecipe, fetchRecipes, setRecipes } from "../models/recipeModel.js";
+import { fetchRecipes, setRecipes } from "../models/recipeModel.js";
+import { createRecipe } from "../db/models/recipeModel.js";
 
 // TODO: Validate query params
 export function getRecipes(req, res) {    
@@ -25,8 +26,10 @@ export function getRecipe(req,res) {
     res.status(200).json(output);
 }
 
-export function addRecipe(req, res) {
-    createRecipe(res.body);
+export async function addRecipe(req, res) {
+    console.log('BODY: ', req.body);
+    
+    await createRecipe(req.body, req.user.id, req.file ? req.file.path : null);
     res.sendStatus(201);
 }
 

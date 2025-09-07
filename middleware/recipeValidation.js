@@ -36,16 +36,16 @@ export const recipeSchema = [
         .exists({ checkFalsy: true }).withMessage('title is required')
         .isString().withMessage('title must be a string')
         .isLength({ min: 3, max: 100 }).withMessage('title must be between 3 and 100 characters'),
-    body('description')
-        .exists({ checkFalsy: true }).withMessage('description is required')
-        .isString().withMessage('description must be a string')
-        .isLength({ min: 10, max: 500 }).withMessage('description must be between 10 and 500 characters'),
+    // body('description')
+    //     .exists({ checkFalsy: true }).withMessage('description is required')
+    //     .isString().withMessage('description must be a string')
+    //     .isLength({ min: 10, max: 500 }).withMessage('description must be between 10 and 500 characters'),
     body('ingredients')
         .exists({ checkFalsy: true }).withMessage('ingredients is required')
         .isArray({ min: 1 }).withMessage('ingredients must have at least one item'),
-    body('cookingTime').exists({checkFalsy: true}).isInt(),
-    body('serving').exists({checkFalsy: true}).isInt(),
-    body('difficulty').exists({checkFalsy: true}).isString().isIn(['easy', 'medium', 'hard']).withMessage('difficulty must be easy | medium | hard')
+    body('cookingTime').exists({ checkFalsy: true }).isInt(),
+    body('servings').exists({ checkFalsy: true }).isInt(),
+    body('difficulty').exists({ checkFalsy: true }).isString().isIn(['easy', 'medium', 'hard']).withMessage('difficulty must be easy | medium | hard'),
 ]
 
 export function validateRecipe(req, res, next) {
