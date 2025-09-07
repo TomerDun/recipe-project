@@ -1,6 +1,6 @@
 import { fetchUserRecipes } from "../db/models/recipeModel.js";
 import { fetchRecipes, setRecipes } from "../models/recipeModel.js";
-import { createRecipe } from "../db/models/recipeModel.js";
+import { createRecipe, deleteRecipe } from "../db/models/recipeModel.js";
 
 // TODO: Validate query params
 export function getRecipes(req, res) {    
@@ -32,13 +32,6 @@ export async function addRecipe(req, res) {
     await createRecipe(req.body, req.user.id, req.file ? req.file.path : null);
     res.sendStatus(201);
 }
-
-export function deleteRecipe(req, res) {        
-    const newRecipes = fetchRecipes().filter(r => r.id != req.params.recipeId);                    
-    setRecipes(newRecipes);
-    res.sendStatus(204);
-}
-
 export function updateRecipe(req, res) {
     const recipes = fetchRecipes();
     const updateIndex = recipes.findIndex(r => r.id == req.params.recipeId);
@@ -58,4 +51,5 @@ export async function getUserRecipesHandler(req, res) {
 // TODO: Add delete image file
 export async function deleteRecipeHandler(req, res) {
     await deleteRecipe(req.params.recipeId);
+    res.status(200).send('Deleted');
 }

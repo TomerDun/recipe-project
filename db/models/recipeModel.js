@@ -6,14 +6,22 @@ export async function fetchUserRecipes(id) {
     return res;
 }
 
-export async function deleteRecipe(id) {
-    await sequelize.query('DELETE FROM recipes WHERE id = :id', { replacements: { id } });
-    return true;
-}
-
 export async function verifyRecipeId(id) {
     const [res] = await sequelize.query('GET id FROM recipes WHERE id = :id', { replacements: { id } });
     return res.length;
+}
+
+export async function checkOwner(recipeId, userId) {    
+    const [res] = await sequelize.query('GET id, userId FROM recipes WHERE id = :recipeId', {replacements: {recipeId}});
+    if (!res.length) return false;
+    
+    console.log(recipe);
+    const recipe = res[0];
+
+    return recipe.userId === userId;
+    
+
+
 }
 
 export async function createRecipe(body, userId, filePath) {
@@ -32,13 +40,16 @@ export async function createRecipe(body, userId, filePath) {
             difficulty: body.difficulty,
             imageUrl: filePath,
             userId: userId,
-            isPublic: body.isPublic,
+            isPublic: (body.isPublic === 'true'),
             instructions: JSON.stringify(body.instructions),
         }
     });
 
     console.log('--uploaded new recipe');
     return true;
+}
 
-
+export async function deleteRecipe(id) {
+    const [res] = await sequelize.query('DELETE FROM recipes WHERE id = :id', {replacements: {id}});
+    return true;
 }

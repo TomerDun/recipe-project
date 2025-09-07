@@ -1,3 +1,4 @@
+import { checkOwner } from "../db/models/recipeModel.js";
 import { fetchRecipes } from "../models/recipeModel.js";
 import { body, validationResult } from "express-validator";
 
@@ -28,6 +29,17 @@ export function recipeExists(req, res, next) {
         throw err;
     }
     next()
+}
+
+export async function verifyOwner(req, res, next) {
+    const verified = await checkOwner(req.params.recipeId, req.user.id);
+    if (verified) {
+        next();
+    }
+    else {
+        const err = new Error('Cannot accesss this resource')
+        err.status = 403;
+    }
 }
 
 
