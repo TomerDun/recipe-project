@@ -1,5 +1,5 @@
 import { fetchUserRecipes } from "../db/models/recipeModel.js";
-import { fetchRecipes, setRecipes } from "../models/recipeModel.js";
+import { fetchRecipes, setRecipes } from "../models/recipeModelOld.js";
 import { createRecipe, deleteRecipe } from "../db/models/recipeModel.js";
 
 // TODO: Validate query params

@@ -1,5 +1,5 @@
 import { checkOwner } from "../db/models/recipeModel.js";
-import { fetchRecipes } from "../models/recipeModel.js";
+import { fetchRecipes } from "../models/recipeModelOld.js";
 import { body, validationResult } from "express-validator";
 
 export function recipefilterValidator(req, res, next) {
@@ -39,6 +39,7 @@ export async function verifyOwner(req, res, next) {
     else {
         const err = new Error('Cannot accesss this resource')
         err.status = 403;
+        throw err;
     }
 }
 

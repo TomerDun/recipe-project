@@ -10,7 +10,9 @@ const upload = multer({dest: 'public/'})
 // -- DB --
 recipeRouter.get('/', protectedRoute, recipefilterValidator, getRecipes);
 recipeRouter.get('/me', protectedRoute, getUserRecipesHandler);
+// TODO: ADD VALIDATION FOR PUT AND POST
 recipeRouter.post('/', protectedRoute, upload.single('image'), addRecipe);
+// TODO: DELETE IMAGE
 recipeRouter.delete('/:recipeId', protectedRoute, verifyOwner, deleteRecipeHandler)
 
 

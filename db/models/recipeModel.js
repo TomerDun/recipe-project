@@ -1,5 +1,6 @@
 import { nanoid } from 'nanoid';
 import { sequelize } from '../connection.js'
+import fs from 'fs';
 
 export async function fetchUserRecipes(id) {
     const [res] = await sequelize.query('SELECT * FROM recipes WHERE userId = :id', { replacements: { id } });
@@ -7,16 +8,16 @@ export async function fetchUserRecipes(id) {
 }
 
 export async function verifyRecipeId(id) {
-    const [res] = await sequelize.query('GET id FROM recipes WHERE id = :id', { replacements: { id } });
+    const [res] = await sequelize.query('SELECT id FROM recipes WHERE id = :id', { replacements: { id } });
     return res.length;
 }
 
 export async function checkOwner(recipeId, userId) {    
-    const [res] = await sequelize.query('GET id, userId FROM recipes WHERE id = :recipeId', {replacements: {recipeId}});
+    const [res] = await sequelize.query('SELECT id, userId FROM recipes WHERE id = :recipeId', {replacements: {recipeId}});
     if (!res.length) return false;
     
-    console.log(recipe);
-    const recipe = res[0];
+    
+    const recipe = res[0];    
 
     return recipe.userId === userId;
     
@@ -50,6 +51,16 @@ export async function createRecipe(body, userId, filePath) {
 }
 
 export async function deleteRecipe(id) {
+    
+    // Delete image
+    const [imageRes] = await sequelize.query('SELECT imageUrl FROM recipes Where id = :id', {replacements: {id}});    
+    
+    if (imageRes.length) {    
+        const imageUrl = imageRes[0].imageUrl;
+        
+        imageUrl && fs.promises.unlink(imageUrl);        
+    }
     const [res] = await sequelize.query('DELETE FROM recipes WHERE id = :id', {replacements: {id}});
+
     return true;
 }
