@@ -58,9 +58,44 @@ export async function deleteRecipe(id) {
     if (imageRes.length) {    
         const imageUrl = imageRes[0].imageUrl;
         
-        imageUrl && fs.promises.unlink(imageUrl);        
+        imageUrl && await fs.promises.unlink(imageUrl);        
     }
     const [res] = await sequelize.query('DELETE FROM recipes WHERE id = :id', {replacements: {id}});
 
+    return true;
+}
+
+export async function updateRecipe(recipeId, body, filePath) {     
+    
+    // Handle image updating
+    let updateFileQuery = ''
+    if (filePath) {
+        updateFileQuery = `imageUrl=:imageUrl, `;
+        // Delete current image
+        const [imageRes] = await sequelize.query('SELECT imageUrl FROM recipes WHERE id = :recipeId', {replacements: {recipeId: recipeId}});
+        const oldImageUrl = imageRes[0].imageUrl;
+        oldImageUrl && await fs.promises.unlink(oldImageUrl);  
+        console.log('Removed old image form the recipe to reaplce with the updated one');
+              
+    }
+    
+    const query = `UPDATE recipes SET title=:title, ingredients=:ingredients, instructions=:instructions, cookingTime=:cookingTime, servings=:servings, difficulty=:difficulty, ${updateFileQuery}
+     isPublic=:isPublic WHERE id=:recipeId`    
+
+    const [res] = await sequelize.query(query, {
+        replacements: {      
+            recipeId: recipeId,
+            title: body.title,
+            ingredients: JSON.stringify(body.ingredients),
+            cookingTime: body.cookingTime,
+            servings: body.servings,
+            difficulty: body.difficulty,
+            imageUrl: filePath,
+            isPublic: (body.isPublic == 'true'),
+            instructions: JSON.stringify(body.instructions),
+        }
+    });
+
+    console.log('--updated recipe');
     return true;
 }

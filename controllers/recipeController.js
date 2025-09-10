@@ -1,6 +1,6 @@
-import { fetchUserRecipes } from "../db/models/recipeModel.js";
 import { fetchRecipes, setRecipes } from "../models/recipeModelOld.js";
-import { createRecipe, deleteRecipe } from "../db/models/recipeModel.js";
+import { fetchUserRecipes ,createRecipe, deleteRecipe, updateRecipe } from "../db/models/recipeModel.js";
+import fs from 'fs';
 
 // TODO: Validate query params
 export function getRecipes(req, res) {    
@@ -32,13 +32,9 @@ export async function addRecipe(req, res) {
     await createRecipe(req.body, req.user.id, req.file ? req.file.path : null);
     res.sendStatus(201);
 }
-export function updateRecipe(req, res) {
-    const recipes = fetchRecipes();
-    const updateIndex = recipes.findIndex(r => r.id == req.params.recipeId);
-    const updateRecipe = recipes[updateIndex];
-
-    recipes[updateIndex] = {...updateRecipe, ...req.body};
-    res.status(201).json(recipes[updateIndex]);
+export async function updateRecipeHandler(req, res) {    
+    await updateRecipe(req.params.recipeId, req.body, req.file ? req.file.path : null) ;
+    res.status(201).send('Updated')
 }
 
 // --DB--

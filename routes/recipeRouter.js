@@ -1,5 +1,5 @@
 import express from 'express';
-import { addRecipe, deleteRecipeHandler, getRecipe, getRecipes, getUserRecipesHandler, updateRecipe, } from '../controllers/recipeController.js';
+import { addRecipe, deleteRecipeHandler, getRecipe, getRecipes, getUserRecipesHandler, updateRecipeHandler, } from '../controllers/recipeController.js';
 import { recipeExists, recipefilterValidator, recipeSchema, validateRecipe, verifyOwner } from '../middleware/recipeValidation.js';
 import { protectedRoute } from '../middleware/authMiddleware.js';
 import multer from 'multer';
@@ -12,6 +12,7 @@ recipeRouter.get('/', protectedRoute, recipefilterValidator, getRecipes);
 recipeRouter.get('/me', protectedRoute, getUserRecipesHandler);
 // TODO: ADD VALIDATION FOR PUT AND POST
 recipeRouter.post('/', protectedRoute, upload.single('image'), addRecipe);
+recipeRouter.put('/:recipeId', protectedRoute, verifyOwner, upload.single('image'), updateRecipeHandler);
 // TODO: DELETE IMAGE
 recipeRouter.delete('/:recipeId', protectedRoute, verifyOwner, deleteRecipeHandler)
 

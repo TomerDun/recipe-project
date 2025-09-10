@@ -34,6 +34,7 @@ export function recipeExists(req, res, next) {
 export async function verifyOwner(req, res, next) {
     const verified = await checkOwner(req.params.recipeId, req.user.id);
     if (verified) {
+        console.log('🍫 Owner validated');        
         next();
     }
     else {
