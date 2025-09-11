@@ -4,6 +4,7 @@ import { errorHandler } from './middleware/errorHandler.js';
 import morgan from 'morgan';
 import { sequelize } from './db/connection.js';
 import { authRouter } from './routes/authRouter.js';
+import { favoritesRouter } from './routes/favoritesRouter.js';
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(morgan('dev'))
 // Routes
 app.use('/recipes', recipeRouter);
 app.use('/auth', authRouter);
+app.use('/users/favorites', favoritesRouter);
 
 
 
