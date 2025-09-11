@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 // --Utils--
 
 function generateToken(data) {
-    const newToken = jwt.sign(data, process.env.JWT_SECRET, {expiresIn: '1h'});
+    const newToken = jwt.sign(data, process.env.JWT_SECRET, {expiresIn: '8h'});
     return newToken;
 }
 
@@ -15,7 +15,7 @@ function generateToken(data) {
 export async function register(req, res) {
     const newUser = await createUser(req.body);
 
-    const newToken = generateToken({id: newUser.id, email: newUser.email});
+    const newToken = generateToken({id: newUser.id, email: newUser.email, username: newUser.username});
     res.status(201).json({
         'message': 'created new user',
         user: newUser,
@@ -26,7 +26,7 @@ export async function register(req, res) {
 export async function login(req, res) {
     const user = await getUser(req.body.email, req.body.password);
     // Generate token for user
-    const token = generateToken({id: user.id, email: user.email});
+    const token = generateToken({id: user.id, email: user.email, username: user.username});
     res.status(200).json({user, token});
 }
 

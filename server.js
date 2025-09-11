@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import { sequelize } from './db/connection.js';
 import { authRouter } from './routes/authRouter.js';
 import { favoritesRouter } from './routes/favoritesRouter.js';
+import mongoose from 'mongoose';
 
 const app = express();
 
@@ -23,7 +24,7 @@ app.use('/users/favorites', favoritesRouter);
 async function testDBConnection() {
     try {
         await sequelize.authenticate();
-        console.log('🚀 DB connection established...');        
+        console.log('🚀 MySQL DB connection established...');        
     }
     catch (err) {
         console.log('❌ Error connecting to DB');
@@ -36,7 +37,11 @@ async function testDBConnection() {
 app.use(errorHandler);
 
 app.listen(8080, async () => {
+    // REQUIRST
     console.log('✈ Server running on port 8080...');
     await testDBConnection();
+    await mongoose.connect(process.env.MONGO_CONNECTION).catch((err) => console.log(err))
+    console.log('🍃 MongoDB Connection Established');
+    
     
 })

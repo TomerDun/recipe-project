@@ -3,8 +3,10 @@ import { addRecipe, deleteRecipeHandler, getRecipe, getRecipes, getUserRecipesHa
 import { recipeExists, recipefilterValidator, recipeSchema, validateRecipe, verifyOwner } from '../middleware/recipeValidation.js';
 import { protectedRoute } from '../middleware/authMiddleware.js';
 import multer from 'multer';
+import { commentsRouter } from './commentsRouter.js';
 
 export const recipeRouter = express.Router();
+recipeRouter.use('/:recipeId/comments', commentsRouter)
 const upload = multer({dest: 'public/'})
 
 // -- DB --
@@ -15,8 +17,6 @@ recipeRouter.post('/', protectedRoute, upload.single('image'), addRecipe);
 recipeRouter.put('/:recipeId', protectedRoute, verifyOwner, upload.single('image'), updateRecipeHandler);
 // TODO: DELETE IMAGE
 recipeRouter.delete('/:recipeId', protectedRoute, verifyOwner, deleteRecipeHandler)
-
-
 
 
 //  --OLD--
