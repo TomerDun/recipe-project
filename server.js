@@ -6,6 +6,7 @@ import { sequelize } from './db/connection.js';
 import { authRouter } from './routes/authRouter.js';
 import { favoritesRouter } from './routes/favoritesRouter.js';
 import mongoose from 'mongoose';
+import { commentsRouter } from './routes/commentsRouter.js';
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(morgan('dev'))
 app.use('/recipes', recipeRouter);
 app.use('/auth', authRouter);
 app.use('/users/favorites', favoritesRouter);
+app.use('/comments', commentsRouter);
 
 
 
@@ -24,7 +26,7 @@ app.use('/users/favorites', favoritesRouter);
 async function testDBConnection() {
     try {
         await sequelize.authenticate();
-        console.log('🚀 MySQL DB connection established...');        
+        console.log('🐬 MySQL DB connection established...');        
     }
     catch (err) {
         console.log('❌ Error connecting to DB');
@@ -41,7 +43,7 @@ app.listen(8080, async () => {
     console.log('✈ Server running on port 8080...');
     await testDBConnection();
     await mongoose.connect(process.env.MONGO_CONNECTION).catch((err) => console.log(err))
-    console.log('🍃 MongoDB Connection Established');
+    console.log('🍃 MongoDB Connection established...');
     
     
 })

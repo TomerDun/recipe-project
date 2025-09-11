@@ -4,9 +4,9 @@ import { recipeExists, recipefilterValidator, recipeSchema, validateRecipe, veri
 import { protectedRoute } from '../middleware/authMiddleware.js';
 import multer from 'multer';
 import { commentsRouter } from './commentsRouter.js';
+import { addComment } from '../controllers/commentsController.js';
 
 export const recipeRouter = express.Router();
-recipeRouter.use('/:recipeId/comments', commentsRouter)
 const upload = multer({dest: 'public/'})
 
 // -- DB --
@@ -15,8 +15,10 @@ recipeRouter.get('/me', protectedRoute, getUserRecipesHandler);
 // TODO: ADD VALIDATION FOR PUT AND POST
 recipeRouter.post('/', protectedRoute, upload.single('image'), addRecipe);
 recipeRouter.put('/:recipeId', protectedRoute, verifyOwner, upload.single('image'), updateRecipeHandler);
-// TODO: DELETE IMAGE
 recipeRouter.delete('/:recipeId', protectedRoute, verifyOwner, deleteRecipeHandler)
+
+// Comments
+recipeRouter.post('/:recuoeId/comments', protectedRoute, addComment);
 
 
 //  --OLD--

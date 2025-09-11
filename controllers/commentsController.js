@@ -22,3 +22,20 @@ export async function addComment(req, res) {
         throw err;
     }
 }
+
+
+// TODO: Add validation
+export async function editComment(req, res) {
+    console.log('CommentId: ', req.params.commentId);
+    
+    const commentUserId = await Comment.findById(req.params.commentId, 'userId');
+
+    if (commentUserId.userId != req.user.id) {
+        const err = new Error('Cannnot access this resource');
+        err.status = 401;
+        throw err;
+    }
+
+    const newComment = await Comment.findByIdAndUpdate(req.params.commentId, req.body, {new: true});
+    res.status(201).json(newComment);
+}
